@@ -1,0 +1,19 @@
+#devices {
+	float: left;
+	width: 335px;
+}
+
+.device {
+	background-color: #33F;
+	background-position: left top;
+	border: 5px dashed #F99;
+	float: left;
+	height: 125px;
+	width: 125px;
+	margin: 7.5px;
+	position: relative;
+}
+
+#grab {
+	float: right;
+}
