@@ -1,8 +1,5 @@
 #devices {
-	top: 10%;
-	float: left;
 	width: 70%;
-	bottom: 80px;
 	position: relative;
 }
 
@@ -13,8 +10,7 @@
 	float: left;
 	height: 125px;
 	width: 125px;
-	margin: 7.5px;
-	position: relative;
+	margin: 8px;
 }
 
 #grab {
