@@ -75,7 +75,7 @@ function populate(list) {
 		});
 		deviceList.append([temp]);
 	});
-	console.log(deviceList);
+	//console.log(deviceList);
 	$('devices').adopt(deviceList);
 	
 }
