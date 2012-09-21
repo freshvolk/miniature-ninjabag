@@ -60,9 +60,8 @@ function addToDeviceList(data){
 }
 
 function addToBag(el){
-	console.log(el);
-	el.set('class','item').getChildren().setProperty('class','item');
-	$('bag').adopt(el.removeEvent('mousedown'));
+	console.log(el);\
+	$('bag').adopt(el);
 	if (bag.contains($('deleteMe'))){
 		$('deleteMe').dispose();
 	}
@@ -142,7 +141,7 @@ function createDevice(data){
 						} else {
 							dragging.destroy();
 							gearDB.update('gear',{'in_bag':true},data, function(tr,res){
-								addToBag(devic);
+								addToBag(createList(data));
 							});
 						}
 					},
