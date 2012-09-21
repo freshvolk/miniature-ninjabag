@@ -55,6 +55,7 @@ function loadFromAPI(offset) {
 		} 
 	});
 	jsonReq.get({'offset' : offset, 'limit' : 25});
+	//Add Event to Load More button with correct new offset
 }
 
 function addToDeviceList(transaction,result){
