@@ -10,6 +10,9 @@ function loadFromDB(){
 	gearDB.findA('gear',addDevices);
 }
 
+/*  This function adds devices from the intially loaded DB,
+	and places them in the correct section, either the devicelist
+	or the bag */	
 function addDevices(transaction,result){
 	var toAdd = []
 	var bag = $('bag');
@@ -17,6 +20,8 @@ function addDevices(transaction,result){
 		loadFromAPI(0);
 	} else {
 		for (var i = result.rows.length - 1; i >= 0; i--){
+
+				//deleteMe is a 
 				if (result.rows.item(i).in_bag === 'true'){
 					if (bag.contains($('deleteMe'))){
 						$('deleteMe').dispose();
@@ -58,6 +63,10 @@ function addToBag(el){
 	console.log(el);
 	el.set('class','item').getChildren().setProperty('class','item');
 	$('bag').adopt(el.removeEvent('mousedown'));
+	if (bag.contains($('deleteMe'))){
+		$('deleteMe').dispose();
+	}
+
 }
 
 function createList(data){
@@ -94,6 +103,7 @@ function createList(data){
 
 					onEnter: function(dragging,target){
 						//Meh
+
 					},
 
 					onCancel: function(dragging){

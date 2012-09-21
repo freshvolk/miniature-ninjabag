@@ -47,7 +47,7 @@ div.device {
 }
 
 img.device {
-	margin: 10px 0px 15px 15px;
+	margin: 10px 15px 0px 15px;
 	height: 92px;
 	width: 100px;	
 	-moz-border-radius: 15px;
@@ -55,7 +55,11 @@ img.device {
 }
 
 .device > span {
-	margin: -30px 10px 0px 10px;	
+	margin: -30px 10px 0px 10px;
+	width: 100px;
+	font-family: 'Passion One', cursive;
+	text-align: center;
+	color: #FFF;
 }
 
 #load {
@@ -103,6 +107,7 @@ div.item {
 }
 
 img.item {
+	float: left;
 	margin: 10px;
 	height: 55px;
 	width: 60px;	
@@ -111,6 +116,13 @@ img.item {
 }
 
 .item > span {
-	width: 200px;
-	float: right;
+	width: 130px;
+	float: left;
+	font-family: 'Passion One', cursive;
+	text-align: center;
+	color: #FFF;
+	vertical-align: middle;
+	margin-top: 20px;
+	margin-left: 10px;
+	margin-bottom: 20px;
 }
