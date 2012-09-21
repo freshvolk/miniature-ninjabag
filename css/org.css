@@ -1,35 +1,103 @@
-#devices {
-	width: 70%;
-	position: relative;
+/*Overall size, centering*/
+#app {
+	width: 1000px;
+	height: 820px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
-.device {
-	background-color: #33F;
-	background-position: left top;
-	border: 5px dashed #F99;
+/*iFixit top header*/
+#title {
+	background-color: #336EAC;
+	height: 100px;
+	-moz-border-top-right-radius: 15px;
+	border-top-right-radius: 15px;
+	-moz-border-top-left-radius: 15px;
+	border-top-left-radius: 15px;
+	-moz-border-bottom-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+}
+
+/*Device list and load more button*/
+#pick {
+	width: 700px;
+	height: 700px;
+	background-color: #FFF;
 	float: left;
-	height: 125px;
-	width: 125px;
-	margin: 8px;
+	margin-left: auto;
 }
 
+#devices {
+	width: 680px;
+	height: 580px;
+	margin: 10px;
+	overflow: scroll;
+}
+
+div.device {
+	background-color: #336EAC;
+	background-position: left top;
+	float: left;
+	height: 130px;
+	width: 130px;
+	margin: 10px;	
+	overflow: hidden;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}
+
+img.device {
+	margin: 10px 0px 15px 15px;
+	height: 92px;
+	width: 100px;	
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}
+
+.device > p {
+	margin: -15px 5px 5px 5px;	
+}
+
+#load {
+	width: 680px;
+	height: 80px;
+	margin: 10px;
+	background-color: #336EAC;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}
+
+
+/*Gear Bag*/
 #grab {
 	float: right;
-	width: 20%;
-	height: 30%;
-	background-color: #FAA;
+	width: 300px;
+	height: 700px;
+	background-color: #F07122;
 	background-position: right top;
-	top: 10%;
-	right: 10%;
-	position: fixed;
+	margin-left: auto;
+	-moz-border-bottom-right-radius: 15px;
+	border-bottom-right-radius: 15px;
+	-moz-border-bottom-left-radius: 15px;
+	border-bottom-left-radius: 15px;
 }
 
-#more {
-	float: center;
-	width: 300px;
-	height: 50px;
-	background-color: #DDD;
-	background-position: left top;
-	position: fixed;
-	bottom: 20px;
+#bag {
+	width: 280px;
+	height: 680px;
+	background-color: #FFF;
+	margin: 10px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	overflow: scroll;
+}
+
+div.item {
+	width: 240px;
+	height: 75px;
+	margin: 10px 10px 20px 10px;
+	list-style-type: none;
+	background-color: #336EAC;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
 }
