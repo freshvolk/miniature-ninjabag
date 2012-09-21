@@ -13,7 +13,7 @@ function loadFromDB(){
 function addDevices(transaction,result){
 	var toAdd = []
 	var bag = $('bag');
-	if (result.rows.length === 0) {
+	if (result === undefined) {
 		loadFromAPI(0);
 	} else {
 		for (var i = result.rows.length - 1; i >= 0; i--){
@@ -38,6 +38,7 @@ function addDevices(transaction,result){
 }
 
 function loadFromAPI(offset) {
+	console.log(offset);
 	var jsonReq = new Request.JSON({
 		url: 'http://www.ifixit.com/api/0.1/devices?',
 		onComplete: function(datum){
@@ -48,9 +49,11 @@ function loadFromAPI(offset) {
 			for (var i = data.length - 1; i >= 0; i--) {
 				//Will be replaced by function that gets image from API
 				var picture = 'http://guide-images.ifixit.net/igi/JJx6Cg1ePt6vAoDn';
-				
+				var awesome = data[i];
 				var values = {'device' : data[i].device, 'device_pic' : picture, 'in_bag' : false};
-				gearDB.insert('gear',values,callback);
+				gearDB.insert('gear',values,function(tr,res){
+					addToDeviceList(tr,res,awesome);
+				});
 			};
 		} 
 	});
@@ -58,26 +61,29 @@ function loadFromAPI(offset) {
 	//Add Event to Load More button with correct new offset
 }
 
-function addToDeviceList(transaction,result){
+function addToDeviceList(transaction,result,datum){
+	console.log(datum.device);
 	$('devices').adopt(new Element('div',{
 		'class' : 'device',
-		'id' : result.insertId,
-		html : "<img class='device' src='" + values['device_pic'] + "'/><p>" + data[i].device + "</p>",
+		html : "<img class='device' src=''/><p>" + datum.device + "</p>",
 		events: {
 			mousedown: function(event){
+				console.log('mousedown')
 				event.stop();
 
-				var dragged = this.clone().setStyles(clone.getCoordinates()).setStyles({
+				var devic = this;
+
+				var clone = devic.clone().setStyles(devic.getCoordinates()).setStyles({
 					opacity: .7,
 					position : 'absolute'
 				}).inject($('app'));
 
-				var drag = new Drag.Move(dragged, {
+				var drag = new Drag.Move(clone, {
 					droppables: $('bag'),
 
 					onDrop: function(dragging,bag){
 						dragging.destroy();
-						gearDB("UPDATE 'gear' SET in_bag = true WHERE device_id = " + result.insertId, addToBag.bindWithEvent());
+						gearDB.exec("UPDATE 'gear' SET in_bag = true WHERE device = '" + datum.device + "'", addToBag.bindWithEvent());
 						
 					},
 
