@@ -7,7 +7,7 @@
 }
 
 /*iFixit top header*/
-#title {
+#title, #trash {
 	background-color: #336EAC;
 	height: 100px;
 	-moz-border-top-right-radius: 15px;
@@ -54,8 +54,8 @@ img.device {
 	border-radius: 15px;
 }
 
-.device > p {
-	margin: -15px 5px 5px 5px;	
+.device > span {
+	margin: -30px 10px 0px 10px;	
 }
 
 #load {
@@ -100,4 +100,17 @@ div.item {
 	background-color: #336EAC;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
+}
+
+img.item {
+	margin: 10px;
+	height: 55px;
+	width: 60px;	
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}
+
+.item > span {
+	width: 200px;
+	float: right;
 }

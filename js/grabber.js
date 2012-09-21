@@ -17,19 +17,13 @@ function addDevices(transaction,result){
 		loadFromAPI(0);
 	} else {
 		for (var i = result.rows.length - 1; i >= 0; i--){
-				if (result.rows.item(i).in_bag === true){
+				if (result.rows.item(i).in_bag === 'true'){
 					if (bag.contains($('deleteMe'))){
 						$('deleteMe').dispose();
 					}
-					bag.adopt(new Element('div',{
-						'class' : 'item',
-						html : result.rows.item(i).device + ' ' + result.rows.item(i).device_id
-					}));
+					bag.adopt(createList(result.rows.item(i)));
 				} else {
-					toAdd.append([new Element('div',{
-						'class' : 'device',
-						html : "<img class='device' src='" + result.rows.item(i).device_pic + "'/><p>" + result.rows.item(i).device + "</p>"
-					})]);
+					toAdd.append([createDevice(result.rows.item(i))]);
 				}
 		}
 		$('devices').adopt(toAdd);
@@ -41,21 +35,12 @@ function loadFromAPI(offset) {
 	console.log(offset);
 	var jsonReq = new Request.JSON({
 		url: 'http://www.ifixit.com/api/0.1/devices?',
-		onComplete: function(datum){
+		onComplete: function(dat){
 			//Temp data...JSON req still failing for unknown reason
 			var data = [{"device":" Game Boy colour","areas":[]},{"device":"04 1994 jeep grand cherokee install ign key cyl","areas":[]},{"device":"1959 Vespa 150","areas":[]},{"device":"1977 Columbia Commuter","areas":["Motorcycle"]},{"device":"1982-1988 Volvo 740","areas":[]},{"device":"1984-1988 Toyota Pickup","areas":["Toyota Automobile"]},{"device":"1984-1989 Toyota Pickup","areas":[]},{"device":"1984-1991 BMW 3-Series","areas":["BMW Automobile"]},{"device":"1985-1988 Volvo 740","areas":["Volvo Automobile"]},{"device":"1986-1993 Volvo 240","areas":["Volvo Automobile"]},{"device":"1987-1993 Kawasaki Ninja 500","areas":["Motorcycle"]},{"device":"1988-1991 Honda Civic","areas":["Honda Automobile"]},{"device":"1988-1994 Toyota Pickup","areas":[]},{"device":"1988-1998 Chevrolet Pickup","areas":["Chevrolet Automobile"]},{"device":"1988-1998 Chevy Pickup","areas":[]},{"device":"1988-1998 Chevy Silverado","areas":[]},{"device":"1989-1994 Mazda Protege","areas":[]},{"device":"1989-1994 Subaru Legacy","areas":["Subaru Automobile"]},{"device":"1989-1994 Toyota Pickup","areas":["Toyota Automobile"]},{"device":"1990 BMW 325i","areas":[]}]
 			
-
 			for (var i = 0; i < data.length; i++) {
-				//Will be replaced by function that gets image from API
-				var picture = 'http://guide-images.ifixit.net/igi/JJx6Cg1ePt6vAoDn';
-
-				var values = {'device' : data[i].device, 'device_pic' : picture, 'in_bag' : false};
-				gearDB.insert('gear',values,function(tr,res){
-					//Somehow this is only passing in the LAST object in the array
-					console.log(values);
-					addToDeviceList(tr,res,values);
-				});
+				addTo(data[i].device);
 			};
 		} 
 	});
@@ -63,12 +48,68 @@ function loadFromAPI(offset) {
 	//Add Event to Load More button with correct new offset
 }
 
-function addToDeviceList(transaction,result,datum){
+function addToDeviceList(data){
 	//Somehow this is always the last object in the data array....wtf mate
-	console.log(datum);
-	$('devices').adopt(new Element('div',{
+	$('devices').adopt(createDevice(data));
+
+}
+
+function addToBag(el){
+	console.log(el);
+	el.set('class','item').getChildren().setProperty('class','item');
+	$('bag').adopt(el.removeEvent('mousedown'));
+}
+
+function createList(data){
+	return new Element('div',{
+		'class' : 'item',
+		html : "<img class='item' src='" + data.device_pic + "'/><span>" + data.device + "</span>",
+		events: {
+			mousedown: function(event){
+				console.log('mousedown')
+				event.stop();
+
+				var devic = this;
+
+				var clone = devic.clone().setStyles(devic.getCoordinates()).setStyles({
+					opacity: .7,
+					position : 'absolute'
+				}).inject($('app'));
+
+				var drag = new Drag.Move(clone, {
+					droppables: $('trash'),
+
+					onDrop: function(dragging,bag,event){
+						if (!bag) {
+							console.log(dragging + " dropped on nada");
+							dragging.destroy();
+						} else {
+							dragging.destroy();
+							gearDB.update('gear',{'in_bag':false},data, function(tr,res){
+								alert(data.device + " deleted from bag");
+								devic.destroy();
+							});
+						}
+					},
+
+					onEnter: function(dragging,target){
+						//Meh
+					},
+
+					onCancel: function(dragging){
+						dragging.destroy();
+					}
+				});
+				drag.start(event);
+			}
+		}
+	});
+}
+
+function createDevice(data){
+	return new Element('div',{
 		'class' : 'device',
-		html : "<img class='device' src=''/><p>" + datum.device + "</p>",
+		html : "<img class='device' src='" + data.device_pic + "'/><span>" + data.device + "</span>",
 		events: {
 			mousedown: function(event){
 				console.log('mousedown')
@@ -84,9 +125,16 @@ function addToDeviceList(transaction,result,datum){
 				var drag = new Drag.Move(clone, {
 					droppables: $('bag'),
 
-					onDrop: function(dragging,bag){
-						dragging.destroy();
-						gearDB.exec("UPDATE 'gear' SET 'in_bag' = true WHERE device = '" + datum.device + "'", addToBag.bindWithEvent());
+					onDrop: function(dragging,bag,event){
+						if (!bag) {
+							console.log(dragging + " dropped on nada");
+							dragging.destroy();
+						} else {
+							dragging.destroy();
+							gearDB.update('gear',{'in_bag':true},data, function(tr,res){
+								addToBag(devic);
+							});
+						}
 					},
 
 					onCancel: function(dragging){
@@ -96,14 +144,5 @@ function addToDeviceList(transaction,result,datum){
 				drag.start(event);
 			}
 		}
-	}));
-
-}
-
-function addToBag(transaction,result){
-	console.log(result);
-	$('bag').adopt(new Element('div',{
-		'class' : 'item',
-		html : result.device + ' ' + result.device_id
-	}));
+	});
 }
