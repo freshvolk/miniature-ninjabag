@@ -46,13 +46,15 @@ function loadFromAPI(offset) {
 			var data = [{"device":" Game Boy colour","areas":[]},{"device":"04 1994 jeep grand cherokee install ign key cyl","areas":[]},{"device":"1959 Vespa 150","areas":[]},{"device":"1977 Columbia Commuter","areas":["Motorcycle"]},{"device":"1982-1988 Volvo 740","areas":[]},{"device":"1984-1988 Toyota Pickup","areas":["Toyota Automobile"]},{"device":"1984-1989 Toyota Pickup","areas":[]},{"device":"1984-1991 BMW 3-Series","areas":["BMW Automobile"]},{"device":"1985-1988 Volvo 740","areas":["Volvo Automobile"]},{"device":"1986-1993 Volvo 240","areas":["Volvo Automobile"]},{"device":"1987-1993 Kawasaki Ninja 500","areas":["Motorcycle"]},{"device":"1988-1991 Honda Civic","areas":["Honda Automobile"]},{"device":"1988-1994 Toyota Pickup","areas":[]},{"device":"1988-1998 Chevrolet Pickup","areas":["Chevrolet Automobile"]},{"device":"1988-1998 Chevy Pickup","areas":[]},{"device":"1988-1998 Chevy Silverado","areas":[]},{"device":"1989-1994 Mazda Protege","areas":[]},{"device":"1989-1994 Subaru Legacy","areas":["Subaru Automobile"]},{"device":"1989-1994 Toyota Pickup","areas":["Toyota Automobile"]},{"device":"1990 BMW 325i","areas":[]}]
 			
 
-			for (var i = data.length - 1; i >= 0; i--) {
+			for (var i = 0; i < data.length; i++) {
 				//Will be replaced by function that gets image from API
 				var picture = 'http://guide-images.ifixit.net/igi/JJx6Cg1ePt6vAoDn';
-				var awesome = data[i];
+
 				var values = {'device' : data[i].device, 'device_pic' : picture, 'in_bag' : false};
 				gearDB.insert('gear',values,function(tr,res){
-					addToDeviceList(tr,res,awesome);
+					//Somehow this is only passing in the LAST object in the array
+					console.log(values);
+					addToDeviceList(tr,res,values);
 				});
 			};
 		} 
@@ -62,7 +64,8 @@ function loadFromAPI(offset) {
 }
 
 function addToDeviceList(transaction,result,datum){
-	console.log(datum.device);
+	//Somehow this is always the last object in the data array....wtf mate
+	console.log(datum);
 	$('devices').adopt(new Element('div',{
 		'class' : 'device',
 		html : "<img class='device' src=''/><p>" + datum.device + "</p>",
@@ -83,8 +86,7 @@ function addToDeviceList(transaction,result,datum){
 
 					onDrop: function(dragging,bag){
 						dragging.destroy();
-						gearDB.exec("UPDATE 'gear' SET in_bag = true WHERE device = '" + datum.device + "'", addToBag.bindWithEvent());
-						
+						gearDB.exec("UPDATE 'gear' SET 'in_bag' = true WHERE device = '" + datum.device + "'", addToBag.bindWithEvent());
 					},
 
 					onCancel: function(dragging){
@@ -99,8 +101,9 @@ function addToDeviceList(transaction,result,datum){
 }
 
 function addToBag(transaction,result){
+	console.log(result);
 	$('bag').adopt(new Element('div',{
 		'class' : 'item',
-		html : result.rows.item(i).device + ' ' + result.rows.item(i).device_id
+		html : result.device + ' ' + result.device_id
 	}));
 }

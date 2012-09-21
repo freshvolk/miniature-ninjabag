@@ -25,12 +25,12 @@ function callbackRows(transaction, result){
 	//refreshGearBag();
 };
 
-function addToBag(device,id,picture){
+/*function addToBag(device,id,picture){
 	var values = {'device' : device, 'device_id' : id, 'device_pic' : picture, 'in_bag' : true};
 	gearDB.insert('gear',values,callback);
 	gearDB.exec("SELECT * FROM 'gear'",callbackRows.bindWithEvent());
 };
-
+*/
 /*function addToDB(device){
 
 }*/
