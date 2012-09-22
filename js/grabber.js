@@ -1,11 +1,10 @@
-var dude = 12;
-
 window.addEvent('domready', function(){
 
 	loadFromDB();
 
 });
 
+// Load existing devices from DB
 function loadFromDB(){
 	gearDB.exec("SELECT * FROM 'gear' ORDER BY device DESC",addDevices);
 }
@@ -36,12 +35,13 @@ function addDevices(transaction,result){
 	}
 }
 
+//Add a device into the main list
 function addToDeviceList(data){
-	//Somehow this is always the last object in the data array....wtf mate
 	$('devices').adopt(createDevice(data));
 
 }
 
+//Add a device to gear bag
 function addToBag(el){
 	console.log(el);
 	$('bag').adopt(el);
@@ -51,17 +51,17 @@ function addToBag(el){
 
 }
 
+//Create and return a new Element to display in Bag
 function createList(data){
 	return new Element('div',{
 		'class' : 'item',
 		html : "<img class='item' id='" + data.device_id + "' src='" + data.device_pic + "'/><span>" + data.device + "</span>",
 		events: {
 			mousedown: function(event){
-				console.log('mousedown')
 				event.stop();
 
 				var devic = this;
-
+				// On mousedown, create element that is properly draggable
 				var clone = devic.clone().setStyles(devic.getCoordinates()).setStyles({
 					opacity: .7,
 					position : 'absolute'
@@ -72,20 +72,22 @@ function createList(data){
 
 					onDrop: function(dragging,bag,event){
 						if (!bag) {
-							console.log(dragging + " dropped on nada");
+							//console.log(dragging + " dropped on nada");
 							dragging.destroy();
 						} else {
+							bag.set('background-color' , '#FFF');
 							dragging.destroy();
 							gearDB.update('gear',{'in_bag':false},data, function(tr,res){
 								alert(data.device + " deleted from bag");
+								addToDeviceList(data);
 								devic.destroy();
 							});
 						}
 					},
 
 					onEnter: function(dragging,target){
-						//Meh
-						
+						//Change Bag bkgd when ok to drop
+						target.set('background-color' , '#AFA');
 					},
 
 					onCancel: function(dragging){
@@ -98,6 +100,7 @@ function createList(data){
 	});
 }
 
+//Creates a new Device element for the device list
 function createDevice(data){
 	return new Element('div',{
 		'class' : 'device',
@@ -108,12 +111,13 @@ function createDevice(data){
 				event.stop();
 
 				var devic = this;
-
+				// On mousedown, create a draggable version of the element
 				var clone = devic.clone().setStyles(devic.getCoordinates()).setStyles({
 					opacity: .7,
 					position : 'absolute'
 				}).inject($('app'));
 
+				//give the clone the power of drag
 				var drag = new Drag.Move(clone, {
 					droppables: $('bag'),
 

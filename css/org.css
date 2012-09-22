@@ -50,6 +50,7 @@
 	overflow-y: scroll;
 }
 
+/* Device in main lsit */
 div.device {
 	background-color: #336EAC;
 	background-position: left top;
@@ -78,6 +79,7 @@ img.device {
 	color: #FFF;
 }
 
+/* Load Moar button */
 #load {
 	width: 680px;
 	height: 50px;
@@ -116,6 +118,7 @@ img.device {
 	overflow-y: scroll;
 }
 
+/*Items in Bag */
 div.item {
 	width: 240px;
 	height: 75px;
