@@ -1,30 +1,49 @@
 function loadFromAPI(offset) {
 	console.log(offset);
-	var jsonReq = new Request.JSON({
-		url: 'http://www.ifixit.com/api/0.1/devices?',
-		onComplete: function(dat){
-			//Temp data...JSON req still failing for unknown reason
-			var data = [{"device":" Game Boy colour","areas":[]},{"device":"04 1994 jeep grand cherokee install ign key cyl","areas":[]},{"device":"1959 Vespa 150","areas":[]},{"device":"1977 Columbia Commuter","areas":["Motorcycle"]},{"device":"1982-1988 Volvo 740","areas":[]},{"device":"1984-1988 Toyota Pickup","areas":["Toyota Automobile"]},{"device":"1984-1989 Toyota Pickup","areas":[]},{"device":"1984-1991 BMW 3-Series","areas":["BMW Automobile"]},{"device":"1985-1988 Volvo 740","areas":["Volvo Automobile"]},{"device":"1986-1993 Volvo 240","areas":["Volvo Automobile"]},{"device":"1987-1993 Kawasaki Ninja 500","areas":["Motorcycle"]},{"device":"1988-1991 Honda Civic","areas":["Honda Automobile"]},{"device":"1988-1994 Toyota Pickup","areas":[]},{"device":"1988-1998 Chevrolet Pickup","areas":["Chevrolet Automobile"]},{"device":"1988-1998 Chevy Pickup","areas":[]},{"device":"1988-1998 Chevy Silverado","areas":[]},{"device":"1989-1994 Mazda Protege","areas":[]},{"device":"1989-1994 Subaru Legacy","areas":["Subaru Automobile"]},{"device":"1989-1994 Toyota Pickup","areas":["Toyota Automobile"]},{"device":"1990 BMW 325i","areas":[]}]
-			
-			for (var i = 0; i < data.length; i++) {
-				addTo(data[i].device,pictureRetrieve(data[i].device));
-			};
-		} 
-	});
-	jsonReq.get({'offset' : offset, 'limit' : 25});
+	var jsonReq = new Element('script',{
+		id : 'jsonReq',
+		src : 'http://www.ifixit.com/api/0.1/devices?offset=' + offset + '&limit=25&jsonp=proccessAPI'
+	})
+	$$(document.getElementsByTagName('head')).adopt(jsonReq);
 	//Add Event to Load More button with correct new offset
+	$('load').removeEvents();
+	$('load').addEvent('click',function(){
+		loadFromAPI(offset+25);
+	})
+}
+
+function proccessAPI(data){
+	console.log(data);
+	for (var i = 0; i < data.length; i++) {
+				
+				pictureRetrieve(data[i]);
+	};
+	$('jsonReq').destroy();
 }
 
 function pictureRetrieve(device){
-	var rsonReq = new Request.JSON({
-		url: 'http://ifixit.com/api/0.1/device/' + device,
+	var myJSONP = new Request.JSONP({
+    	url: 'http://www.ifixit.com/api/0.1/device/' + device.device,
+    	callbackKey: 'jsonp',
+    	onRequest: function(url){
+        	// a script tag is created with a src attribute equal to url
+        	console.log(url);
+    	},
+    	onComplete: function(data){
+    	    // the request was completed.
+    	    console.log(data);
+    	    console.log(data.image.text);
+    	    if (data.image.text !== undefined){
+    	    	addTo(device.device,data.image.text);
+    		} else {
+    			addTo(device.device,'http://www.ifixit.com/Misc/fist.png');
+    		}
+    	}
+	}).send();
+	/*var jsonIMGReq = new Element('script',{
+		id : 'jsonIMG',
+		src : 'http://ifixit.com/api/0.1/device/' + device + '?jsonp=imageURL'
+	});
 
-		onSuccess: function(){
-			console.log('Success?');
-		},
-
-		onFailure: function(){
-			console.log('Failure');
-		}
-	}).get();
+	$$(document.getElementsByTagName('head')).adopt(jsonIMGReq);*/
 }

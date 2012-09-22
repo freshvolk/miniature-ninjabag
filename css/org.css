@@ -2,12 +2,12 @@
 #app {
 	width: 1000px;
 	height: 620px;
-	margin-left: auto;
-	margin-right: auto;
+	margin: auto;
 }
 
 /*iFixit top header*/
-#title, #trash {
+#title, #trash{
+	z-index: 0;
 	background-color: #336EAC;
 	height: 100px;
 	-moz-border-top-right-radius: 15px;
@@ -18,11 +18,22 @@
 	border-bottom-left-radius: 15px;
 }
 
-#trash > h1 {
+#trash > img {
+	margin: 10px 30px 10px;
+	max-width: 263px;
+	max-height: 80px;
+}
+
+#trash > span > h1 {
 	color: #FFF;
 	font-family: 'Passion One', cursive;
-	text-align: center;
-	font-size: 50px;
+	text-align: right;
+	font-size: 30px;
+}
+#trash > span {
+	float: right;
+	margin-top: 10px;
+	margin-right: 20px;
 }
 
 /*Device list and load more button*/
@@ -36,9 +47,9 @@
 
 #devices {
 	width: 680px;
-	height: 380px;
+	height: 420px;
 	margin: 10px;
-	overflow: scroll;
+	overflow-y: scroll;
 }
 
 div.device {
@@ -71,11 +82,15 @@ img.device {
 
 #load {
 	width: 680px;
-	height: 80px;
+	height: 50px;
 	margin: 10px;
 	background-color: #336EAC;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
+	color: #FFF;
+	font-family: 'Passion One', cursive;
+	text-align: center;
+	font-size: 50px;
 }
 
 
@@ -100,7 +115,7 @@ img.device {
 	margin: 10px;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
-	overflow: scroll;
+	overflow-y: scroll;
 }
 
 div.item {

@@ -7,7 +7,7 @@ window.addEvent('domready', function(){
 });
 
 function loadFromDB(){
-	gearDB.findA('gear',addDevices);
+	gearDB.exec("SELECT * FROM 'gear' ORDER BY device DESC",addDevices);
 }
 
 /*  This function adds devices from the intially loaded DB,
@@ -54,7 +54,7 @@ function addToBag(el){
 function createList(data){
 	return new Element('div',{
 		'class' : 'item',
-		html : "<img class='item' src='" + data.device_pic + "'/><span>" + data.device + "</span>",
+		html : "<img class='item' id='" + data.device_id + "' src='" + data.device_pic + "'/><span>" + data.device + "</span>",
 		events: {
 			mousedown: function(event){
 				console.log('mousedown')
@@ -85,7 +85,7 @@ function createList(data){
 
 					onEnter: function(dragging,target){
 						//Meh
-
+						
 					},
 
 					onCancel: function(dragging){
@@ -101,7 +101,7 @@ function createList(data){
 function createDevice(data){
 	return new Element('div',{
 		'class' : 'device',
-		html : "<img class='device' src='" + data.device_pic + "'/><span>" + data.device + "</span>",
+		html : "<img class='device' id='" + data.device_id + "' src='" + data.device_pic + "'/><span>" + data.device + "</span>",
 		events: {
 			mousedown: function(event){
 				console.log('mousedown')
@@ -126,6 +126,7 @@ function createDevice(data){
 							gearDB.update('gear',{'in_bag':true},data, function(tr,res){
 								addToBag(createList(data));
 							});
+							devic.destroy();
 						}
 					},
 
@@ -138,3 +139,4 @@ function createDevice(data){
 		}
 	});
 }
+
