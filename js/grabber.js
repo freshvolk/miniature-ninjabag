@@ -31,7 +31,9 @@ function addDevices(transaction,result){
 				}
 		}
 		$('devices').adopt(toAdd);
-		loadFromAPI(result.rows.length);
+		$('load').addEvent('click',function(){
+			loadFromAPI(esult.rows.length);
+		})
 	}
 }
 
