@@ -26,15 +26,11 @@ function pictureRetrieve(device){
 	var myJSONP = new Request.JSONP({
     	url: 'http://www.ifixit.com/api/0.1/device/' + device.device,
     	callbackKey: 'jsonp',
-    	// onRequest: function(url){
-     	//  // a script tag is created with a src attribute equal to url
-     	//  console.log(url);
-    	// },
     	onComplete: function(data){
     	    // the request was completed.
     	    //Check if image exists, if not placeholder
     	    if (data.image.text !== undefined){
-    	    	addTo(device.device,data.image.text);
+    	    	addTo(device.device,data.image.text + ".thumbnail");
     		} else {
     			addTo(device.device,'http://www.ifixit.com/Misc/fist.png');
     		}
