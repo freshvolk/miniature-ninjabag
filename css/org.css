@@ -65,8 +65,8 @@ div.device {
 
 img.device {
 	margin: 10px 15px 0px 15px;
-	height: 92px;
-	width: 100px;	
+	height: 72px;
+	width: 96px;	
 	-moz-border-radius: 15px;
 	border-radius: 15px;
 }
@@ -132,7 +132,7 @@ div.item {
 img.item {
 	float: left;
 	margin: 10px;
-	height: 55px;
+	height: 45px;
 	width: 60px;	
 	-moz-border-radius: 15px;
 	border-radius: 15px;
